@@ -1,5 +1,5 @@
-poitou/poitou-data.xlsx
-atrato/atrato-data.xlsx
-atrato/distritos.geojson
+*.xlsx
+*.csv
+*.geojson
 .idea
 .ipynb_checkpoints
