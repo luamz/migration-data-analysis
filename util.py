@@ -157,3 +157,34 @@ def generate_passport_bar(df):
     passports["passport_date"] = pd.to_datetime(passports['passport_date'], format='%d/%m/%Y')
     passports = passports.sort_values(by='passport_date')
     return passports
+
+
+def generate_passport_bar_alijo(df):
+
+    alijo = df.query("naturality_place == 'Alijó'")[['naturality_place', 'passport_date']] \
+        .value_counts().to_frame("Alijó").reset_index().drop(columns=['naturality_place'])
+    carlao = df.query("naturality_place == 'Carlão'")[['naturality_place', 'passport_date']] \
+        .value_counts().to_frame("Carlão").reset_index().drop(columns=['naturality_place'])
+    cotas = df.query("naturality_place == 'Cotas'")[['naturality_place', 'passport_date']] \
+        .value_counts().to_frame("Cotas").reset_index().drop(columns=['naturality_place'])
+    favaios = df.query("naturality_place == 'Favaios'")[['naturality_place', 'passport_date']] \
+        .value_counts().to_frame("Favaios").reset_index().drop(columns=['naturality_place'])
+    granja = df.query("naturality_place == 'Granja'")[['naturality_place', 'passport_date']] \
+        .value_counts().to_frame("Granja").reset_index().drop(columns=['naturality_place'])
+    pegarinhos = df.query("naturality_place == 'Pegarinhos'")[['naturality_place', 'passport_date']] \
+        .value_counts().to_frame("Pegarinhos").reset_index().drop(columns=['naturality_place'])
+    presandaes = df.query("naturality_place == 'Presandães'")[['naturality_place', 'passport_date']] \
+        .value_counts().to_frame("Presandães").reset_index().drop(columns=['naturality_place'])
+    sanfins = df.query("naturality_place == 'Sanfins do Douro'")[['naturality_place', 'passport_date']] \
+        .value_counts().to_frame("Sanfins do Douro").reset_index().drop(columns=['naturality_place'])
+
+    passports = alijo.merge(carlao, on='passport_date', how='outer') \
+        .merge(cotas, on='passport_date', how='outer') \
+        .merge(favaios, on='passport_date', how='outer') \
+        .merge(granja, on='passport_date', how='outer') \
+        .merge(pegarinhos, on='passport_date', how='outer') \
+        .merge(presandaes, on='passport_date', how='outer') \
+        .merge(sanfins, on='passport_date', how='outer')
+    passports["passport_date"] = pd.to_datetime(passports['passport_date'], format='%d/%m/%Y')
+    passports = passports.sort_values(by='passport_date')
+    return passports
