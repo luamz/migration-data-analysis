@@ -99,7 +99,7 @@ def generate_texts_distrito_concelho(distritos_concelhos_map, concelhos_map):
     for j in range(len(concelhos_map)):
         if concelhos_map['count'][j] > 0:
             plt.text(concelhos_map.long[j] - 4000, concelhos_map.lat[j],
-                     f"{concelhos_map.Concelho[j]}",
+                     f"{concelhos_map.Concelho[j]}\n{' ' * 2}{concelhos_map['count'][j]}",
                      size=4.8)
 
 
@@ -188,3 +188,21 @@ def generate_passport_bar_alijo(df):
     passports["passport_date"] = pd.to_datetime(passports['passport_date'], format='%d/%m/%Y')
     passports = passports.sort_values(by='passport_date')
     return passports
+
+
+def generate_destination(df):
+    triumpho = df.query("destination == 'Triumpho'")[['destination', 'destination_date']] \
+        .value_counts().to_frame("Triumpho").reset_index().drop(columns=['destination'])
+    penha = df.query("destination == 'Penha Longa'")[['destination', 'destination_date']] \
+        .value_counts().to_frame("Penha Longa").reset_index().drop(columns=['destination'])
+    corte = df.query("destination == 'Corte'")[['destination', 'destination_date']] \
+        .value_counts().to_frame("Corte").reset_index().drop(columns=['destination'])
+    capital = df.query("destination == 'Capital'")[['destination', 'destination_date']] \
+        .value_counts().to_frame("Capital").reset_index().drop(columns=['destination'])
+
+    destinations = triumpho.merge(penha, on='destination_date', how='outer') \
+        .merge(corte, on='destination_date', how='outer') \
+        .merge(capital, on='destination_date', how='outer')
+    destinations["destination_date"] = pd.to_datetime(destinations['destination_date'], format='%Y-%m-%d')
+    destinations = destinations.sort_values(by='destination_date')
+    return destinations
